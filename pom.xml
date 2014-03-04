@@ -22,13 +22,13 @@
   <parent>
     <groupId>org.apache.jclouds</groupId>
     <artifactId>jclouds-project</artifactId>
-    <version>1.7.2-ea-brooklyn1</version>
+    <version>1.7.2-brooklyn.1</version>
   </parent>
   <groupId>org.apache.jclouds.labs</groupId>
   <artifactId>jclouds-labs-google</artifactId>
   <packaging>pom</packaging>
   <name>Apache jclouds labs google</name>
-  <version>1.7.2-ea-brooklyn1</version>
+  <version>1.7.2-brooklyn.1</version>
   
   <scm>
     <connection>scm:git:https://git-wip-us.apache.org/repos/asf/jclouds-labs-google.git</connection>
@@ -79,7 +79,7 @@
             </goals>
             <configuration>
               <resourceBundles>
-                <resourceBundle>org.apache.jclouds:jclouds-resources:1.7.2-ea-brooklyn1</resourceBundle>
+                <resourceBundle>org.apache.jclouds:jclouds-resources:1.7.2-brooklyn.1</resourceBundle>
               </resourceBundles>
             </configuration>
           </execution>
