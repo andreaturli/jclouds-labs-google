@@ -20,11 +20,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.apache.jclouds</groupId>
+    <groupId>io.cloudsoft.jclouds</groupId>
     <artifactId>jclouds-project</artifactId>
     <version>1.7.2-ea-brooklyn.1</version>
   </parent>
-  <groupId>org.apache.jclouds.labs</groupId>
+  <groupId>io.cloudsoft.jclouds.labs</groupId>
   <artifactId>jclouds-labs-google</artifactId>
   <packaging>pom</packaging>
   <name>Apache jclouds labs google</name>
@@ -37,16 +37,8 @@
     <tag>HEAD</tag>
   </scm>
 
-  <distributionManagement>
-    <repository>
-      <id>cloudsoft-releases</id>
-      <name>cloudsoft-releases</name>
-      <url>scpexe://maven@releng2.cloudsoftcorp.com/var/www/developer/maven/releases/</url>
-    </repository>
-  </distributionManagement>  
-
   <properties>
-    <jclouds.version>1.7.1-SNAPSHOT</jclouds.version>
+    <jclouds.version>1.7.2-ea-brooklyn.1</jclouds.version>
   </properties>
 
   <repositories>
@@ -68,13 +60,6 @@
   </modules>
 
   <build>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh-external</artifactId>
-        <version>2.4</version>
-      </extension>
-    </extensions>    
     <plugins>
       <plugin>
         <groupId>com.mycila.maven-license-plugin</groupId>
