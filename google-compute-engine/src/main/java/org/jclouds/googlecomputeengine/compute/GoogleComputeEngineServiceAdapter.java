@@ -55,20 +55,11 @@ import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
 import org.jclouds.googlecomputeengine.compute.functions.FirewallTagNamingConvention;
 import org.jclouds.googlecomputeengine.compute.options.GoogleComputeEngineTemplateOptions;
 import org.jclouds.googlecomputeengine.config.UserProject;
-import org.jclouds.googlecomputeengine.domain.Disk;
-import org.jclouds.googlecomputeengine.domain.Image;
-import org.jclouds.googlecomputeengine.domain.Instance;
+import org.jclouds.googlecomputeengine.domain.*;
 import org.jclouds.googlecomputeengine.domain.Instance.AttachedDisk;
 import org.jclouds.googlecomputeengine.domain.Instance.PersistentAttachedDisk;
-import org.jclouds.googlecomputeengine.domain.InstanceInZone;
-import org.jclouds.googlecomputeengine.domain.InstanceTemplate;
 import org.jclouds.googlecomputeengine.domain.InstanceTemplate.PersistentDisk;
 import org.jclouds.googlecomputeengine.domain.InstanceTemplate.PersistentDisk.Mode;
-import org.jclouds.googlecomputeengine.domain.MachineType;
-import org.jclouds.googlecomputeengine.domain.MachineTypeInZone;
-import org.jclouds.googlecomputeengine.domain.Operation;
-import org.jclouds.googlecomputeengine.domain.SlashEncodedIds;
-import org.jclouds.googlecomputeengine.domain.Zone;
 import org.jclouds.googlecomputeengine.features.InstanceApi;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.logging.Logger;
@@ -263,6 +254,12 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
          builder.addAll(api.getMachineTypeApiForProject(userProject.get())
                  .listInZone(zone.getId())
                  .concat()
+                 .filter(new Predicate<MachineType>() {
+                    @Override
+                    public boolean apply(MachineType input) {
+                       return input.getDeprecated().isPresent() ? false : true;
+                    }
+                 })
                  .transform(new Function<MachineType, MachineTypeInZone>() {
 
                     @Override

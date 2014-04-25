@@ -16,14 +16,20 @@
  */
 package org.jclouds.googlecomputeengine.compute;
 
+import static org.jclouds.oauth.v2.OAuthTestUtils.setCredentialFromPemFile;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
+import java.util.Properties;
+import java.util.Set;
 
+import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.internal.BaseComputeServiceLiveTest;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import com.google.inject.Module;
 
 /**
@@ -34,6 +40,21 @@ public class GoogleComputeEngineServiceLiveTest extends BaseComputeServiceLiveTe
 
    public GoogleComputeEngineServiceLiveTest() {
       provider = "google-compute-engine";
+   }
+
+   @Override
+   protected Properties setupProperties() {
+      Properties props = super.setupProperties();
+      setCredentialFromPemFile(props, provider + ".credential");
+      return props;
+   }
+
+   @Test
+   public void testGetImage() throws Exception {
+      Set<? extends Image> images = client.listImages();
+      String id = Iterables.getLast(images, null).getId();
+      Image image = client.getImage(id);
+      assertEquals(image.getName(), id);
    }
 
    /**
