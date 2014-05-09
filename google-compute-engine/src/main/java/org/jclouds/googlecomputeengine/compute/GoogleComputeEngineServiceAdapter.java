@@ -257,7 +257,7 @@ public class GoogleComputeEngineServiceAdapter implements ComputeServiceAdapter<
                  .filter(new Predicate<MachineType>() {
                     @Override
                     public boolean apply(MachineType input) {
-                       return input.getDeprecated().isPresent() ? false : true;
+                       return !input.getDeprecated().isPresent();
                     }
                  })
                  .transform(new Function<MachineType, MachineTypeInZone>() {

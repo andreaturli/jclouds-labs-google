@@ -20,11 +20,12 @@ import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Objects.toStringHelper;
 import static com.google.common.base.Optional.fromNullable;
 import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.beans.ConstructorProperties;
 import java.net.URI;
 import java.util.Date;
 import java.util.List;
+
+import org.jclouds.javax.annotation.Nullable;
 
 import com.google.common.annotations.Beta;
 import com.google.common.base.Objects;
@@ -57,7 +58,7 @@ public final class MachineType extends Resource {
    private MachineType(String id, Date creationTimestamp, URI selfLink, String name, String description,
                        int guestCpus, int memoryMb, int imageSpaceGb, List<ScratchDisk> scratchDisks,
                        int maximumPersistentDisks, long maximumPersistentDisksSizeGb, String zone,
-                       Deprecated deprecated) {
+                       @Nullable Deprecated deprecated) {
       super(Kind.MACHINE_TYPE, id, creationTimestamp, selfLink, name, description);
       this.guestCpus = checkNotNull(guestCpus, "guestCpus of %s", name);
       this.memoryMb = checkNotNull(memoryMb, "memoryMb of %s", name);

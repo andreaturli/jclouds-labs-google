@@ -16,27 +16,38 @@
  */
 package org.jclouds.googlecomputeengine.compute;
 
+import static com.google.common.collect.Iterables.contains;
 import static org.jclouds.oauth.v2.OAuthTestUtils.setCredentialFromPemFile;
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 import java.util.Properties;
 import java.util.Set;
 
-import org.jclouds.compute.domain.Image;
+import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.internal.BaseComputeServiceLiveTest;
+import org.jclouds.googlecomputeengine.GoogleComputeEngineApi;
+import org.jclouds.googlecomputeengine.config.UserProject;
+import org.jclouds.googlecomputeengine.domain.MachineType;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.Test;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Key;
 import com.google.inject.Module;
+import com.google.inject.TypeLiteral;
 
 /**
  * @author David Alves
  */
 @Test(groups = "live", singleThreaded = true)
 public class GoogleComputeEngineServiceLiveTest extends BaseComputeServiceLiveTest {
+
+   protected static final String DEFAULT_ZONE_NAME = "us-central1-a";
 
    public GoogleComputeEngineServiceLiveTest() {
       provider = "google-compute-engine";
@@ -49,12 +60,31 @@ public class GoogleComputeEngineServiceLiveTest extends BaseComputeServiceLiveTe
       return props;
    }
 
-   @Test
-   public void testGetImage() throws Exception {
-      Set<? extends Image> images = client.listImages();
-      String id = Iterables.getLast(images, null).getId();
-      Image image = client.getImage(id);
-      assertEquals(image.getName(), id);
+   public void testListHardwareProfiles() throws Exception {
+      GoogleComputeEngineApi api = client.getContext().unwrapApi(GoogleComputeEngineApi.class);
+      Supplier<String> userProject = context.utils().injector().getInstance(Key.get(new TypeLiteral<Supplier<String>>() {
+      }, UserProject.class));
+      ImmutableSet<String> deprecatedMachineTypeIds =
+              api.getMachineTypeApiForProject(userProject.get())
+                      .listInZone(DEFAULT_ZONE_NAME)
+                      .concat()
+                      .filter(new Predicate<MachineType>() {
+                         @Override
+                         public boolean apply(MachineType input) {
+                            return input.getDeprecated().isPresent();
+                         }
+                      })
+                      .transform(new Function<MachineType, String>() {
+                         @Override
+                         public String apply(MachineType input) {
+                            return input.getId();
+                         }
+                      })
+                      .toSet();
+      Set<? extends Hardware> hardwareProfiles = client.listHardwareProfiles();
+      for (Hardware hardwareProfile : hardwareProfiles) {
+         assertFalse(contains(deprecatedMachineTypeIds, hardwareProfile.getId()));
+      }
    }
 
    /**
