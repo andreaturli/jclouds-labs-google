@@ -32,8 +32,6 @@ import org.jclouds.googlecomputeengine.domain.MachineType;
 import org.jclouds.sshj.config.SshjSshClientModule;
 import org.testng.annotations.Test;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -64,25 +62,18 @@ public class GoogleComputeEngineServiceLiveTest extends BaseComputeServiceLiveTe
       GoogleComputeEngineApi api = client.getContext().unwrapApi(GoogleComputeEngineApi.class);
       Supplier<String> userProject = context.utils().injector().getInstance(Key.get(new TypeLiteral<Supplier<String>>() {
       }, UserProject.class));
-      ImmutableSet<String> deprecatedMachineTypeIds =
-              api.getMachineTypeApiForProject(userProject.get())
-                      .listInZone(DEFAULT_ZONE_NAME)
-                      .concat()
-                      .filter(new Predicate<MachineType>() {
-                         @Override
-                         public boolean apply(MachineType input) {
-                            return input.getDeprecated().isPresent();
-                         }
-                      })
-                      .transform(new Function<MachineType, String>() {
-                         @Override
-                         public String apply(MachineType input) {
-                            return input.getId();
-                         }
-                      })
-                      .toSet();
+      ImmutableSet.Builder<String> deprecatedMachineTypes = ImmutableSet.builder();
+      for (MachineType machine : api.getMachineTypeApiForProject(userProject.get())
+              .listInZone(DEFAULT_ZONE_NAME).concat()) {
+         if (machine.getDeprecated().isPresent()) {
+            deprecatedMachineTypes.add(machine.getId());
+         }
+      }
+      ImmutableSet<String> deprecatedMachineTypeIds = deprecatedMachineTypes.build();
       Set<? extends Hardware> hardwareProfiles = client.listHardwareProfiles();
+      System.out.println(hardwareProfiles.size());
       for (Hardware hardwareProfile : hardwareProfiles) {
+         System.out.println(hardwareProfile);
          assertFalse(contains(deprecatedMachineTypeIds, hardwareProfile.getId()));
       }
    }

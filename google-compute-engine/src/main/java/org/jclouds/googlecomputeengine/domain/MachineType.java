@@ -249,7 +249,7 @@ public final class MachineType extends Resource {
        * @see MachineType#getDeprecated()
        */
       public Builder deprecated(Deprecated deprecated) {
-         this.deprecated = checkNotNull(deprecated, "deprecated");
+         this.deprecated = deprecated;
          return this;
       }
 
