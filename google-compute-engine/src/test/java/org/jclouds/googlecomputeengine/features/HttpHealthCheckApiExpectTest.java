@@ -25,6 +25,7 @@ import static org.testng.AssertJUnit.assertNull;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineApiExpectTest;
+import org.jclouds.googlecomputeengine.options.ListOptions;
 import org.jclouds.googlecomputeengine.parse.ParseHttpHealthCheckListTest;
 import org.jclouds.googlecomputeengine.parse.ParseHttpHealthCheckTest;
 import org.jclouds.googlecomputeengine.parse.ParseRegionOperationTest;
@@ -154,7 +155,8 @@ public class HttpHealthCheckApiExpectTest extends BaseGoogleComputeEngineApiExpe
       HttpHealthCheckApi api = requestsSendResponses(requestForScopes(COMPUTE_READONLY_SCOPE),
               TOKEN_RESPONSE, list, operationResponse).getHttpHealthCheckApi("myproject");
 
-      assertEquals(api.list().toString(),
+      ListOptions options = new ListOptions();
+      assertEquals(api.list(options).toString(),
               new ParseHttpHealthCheckListTest().expected().toString());
    }
 

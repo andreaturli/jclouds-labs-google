@@ -17,6 +17,7 @@
 package org.jclouds.googlecomputeengine.features;
 
 import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineApiExpectTest;
+import org.jclouds.googlecomputeengine.options.ListOptions;
 import org.jclouds.googlecomputeengine.parse.ParseRegionOperationTest;
 import org.jclouds.googlecomputeengine.parse.ParseTargetPoolListTest;
 import org.jclouds.googlecomputeengine.parse.ParseTargetPoolTest;
@@ -136,7 +137,8 @@ public class TargetPoolApiExpectTest extends BaseGoogleComputeEngineApiExpectTes
       TargetPoolApi api = requestsSendResponses(requestForScopes(COMPUTE_READONLY_SCOPE),
               TOKEN_RESPONSE, list, operationResponse).getTargetPoolApi("myproject", "us-central1");
 
-      assertEquals(api.list().toString(),
+      ListOptions options = new ListOptions();
+      assertEquals(api.list(options).toString(),
               new ParseTargetPoolListTest().expected().toString());
    }
 

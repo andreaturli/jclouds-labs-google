@@ -46,7 +46,7 @@ public class TargetPoolApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
       assertEquals(targetPool.getName(), TARGETPOOL_NAME);
    }
 
-   @Test(groups = "live", dependsOnMethods = "testGetTargetPool")
+   @Test(groups = "live", dependsOnMethods = "testInsertTargetPool")
    public void testListTargetPool() {
 
       IterableWithMarker<TargetPool> targetPool = api().list(new ListOptions.Builder()
@@ -54,7 +54,7 @@ public class TargetPoolApiLiveTest extends BaseGoogleComputeEngineApiLiveTest {
       assertEquals(targetPool.toList().size(), 1);
    }
 
-   @Test(groups = "live", dependsOnMethods = "testListTargetPool")
+   @Test(groups = "live", dependsOnMethods = {"testListTargetPool", "testGetTargetPool"})
    public void testDeleteTargetPool() {
       assertRegionOperationDoneSucessfully(api().delete(TARGETPOOL_NAME), TIME_WAIT);
    }

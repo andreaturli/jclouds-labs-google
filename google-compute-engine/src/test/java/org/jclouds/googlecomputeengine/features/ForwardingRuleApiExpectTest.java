@@ -17,6 +17,7 @@
 package org.jclouds.googlecomputeengine.features;
 
 import org.jclouds.googlecomputeengine.internal.BaseGoogleComputeEngineApiExpectTest;
+import org.jclouds.googlecomputeengine.options.ListOptions;
 import org.jclouds.googlecomputeengine.parse.ParseRegionOperationTest;
 import org.jclouds.googlecomputeengine.parse.ParseForwardingRuleListTest;
 import org.jclouds.googlecomputeengine.parse.ParseForwardingRuleTest;
@@ -143,8 +144,9 @@ public class ForwardingRuleApiExpectTest extends BaseGoogleComputeEngineApiExpec
 
       ForwardingRuleApi api = requestsSendResponses(requestForScopes(COMPUTE_READONLY_SCOPE),
               TOKEN_RESPONSE, list, operationResponse).getForwardingRuleApi("myproject", "us-central1");
-
-      assertEquals(api.list().toString(),
+      
+      ListOptions options = new ListOptions();
+      assertEquals(api.list(options).toString(),
               new ParseForwardingRuleListTest().expected().toString());
    }
 
