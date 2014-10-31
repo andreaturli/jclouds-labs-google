@@ -33,7 +33,7 @@ public class HttpHealthCheckApiLiveTest extends BaseGoogleComputeEngineApiLiveTe
    private static final String HTTP_HEALTH_CHECK_NAME = "http-health-check-api-live-test";
    private static final int TIME_WAIT = 60;
    private static final int HEALTHY_THRESHOLD = 30;
-   private static final int UNHEALTHY_THRESHOLD =15;
+   private static final int UNHEALTHY_THRESHOLD = 15;
    private static final int PORT = 56;
    private static final String DESCRIPTION = "A First Health Check!";
    private static final int TIMEOUT_SEC = 40;
